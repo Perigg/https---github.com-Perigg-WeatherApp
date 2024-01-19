@@ -1,38 +1,3 @@
-// import React from 'react';
-
-// const WeatherDetails = ({ forecastData }) => {
-//   const getFormattedDate = (timestamp) => {
-//     const date = new Date(timestamp * 1000);
-//     return date.toLocaleDateString('en-US', { weekday: 'long' });
-//   };
-
-//   return (
-//     <div className="weather-details">
-//       {forecastData && (
-//         <>
-//           <h2>5-Day Forecast</h2>
-//           {forecastData.list.slice(0, 5).map((day) => (
-//             <div key={day.dt} className="forecast-day">
-//               <p>{getFormattedDate(day.dt)}</p>
-//               <p>Min Temp: {day.main.temp_min}°C</p>
-//               <p>Max Temp: {day.main.temp_max}°C</p>
-//               <p>Description: {day.weather[0].description}</p>
-//               {/* Add an appropriate icon for weather conditions */}
-//               <img
-//                 src={`https://openweathermap.org/img/w/${day.weather[0].icon}.png`}
-//                 alt="Weather Icon"
-//               />
-//             </div>
-//           ))}
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default WeatherDetails;
-
-
 import React from 'react';
 
 const WeatherDetails = ({ forecastData }) => {
@@ -42,7 +7,7 @@ const WeatherDetails = ({ forecastData }) => {
   };
 
   const filterDailyReports = (list) => {
-    // Skapa ett objekt för att hålla unika dagar
+    // ett objekt för att hålla unika dagar
     const dailyData = {};
 
     // Loopa igenom varje rapport
@@ -54,10 +19,14 @@ const WeatherDetails = ({ forecastData }) => {
         // Om dagen inte finns i objektet eller om temperaturen är högre än max eller lägre än min
         if (!dailyData[date] || report.main.temp > dailyData[date].maxTemp) {
           dailyData[date] = {
-            minTemp: report.main.temp,
-            maxTemp: report.main.temp,
+            minTemp: Math.round(report.main.temp),
+            maxTemp: Math.round(report.main.temp),
             icon: report.weather[0]?.icon || '',
             description: report.weather[0]?.description || 'N/A',
+            windSpeed: Math.round(report.wind?.speed) || 'N/A',
+            humidity: Math.round(report.main?.humidity) || 'N/A',
+            pressure: Math.round(report.main?.pressure) || 'N/A',
+            
           };
         } else {
           // Uppdatera min och max om temperaturen är högre eller lägre
@@ -74,12 +43,15 @@ const WeatherDetails = ({ forecastData }) => {
       maxTemp: dailyData[date].maxTemp,
       icon: dailyData[date].icon,
       description: dailyData[date].description,
+      windSpeed: dailyData[date].windSpeed,
+      humidity: dailyData[date].humidity,
+      pressure: dailyData[date].pressure,
+      
     }));
 
     return aggregatedArray;
   };
 
-  // Logga data för att felsöka om det behövs
   console.log('Forecast Data:', forecastData);
   const filteredReports = forecastData ? filterDailyReports(forecastData.list) : [];
   console.log('Filtered Reports:', filteredReports);
@@ -97,10 +69,13 @@ const WeatherDetails = ({ forecastData }) => {
                   src={`https://openweathermap.org/img/w/${day.icon}.png`}
                   alt="Weather Icon"
                 />
-                <p>Min Temp: {day.minTemp !== undefined ? Math.round(day.minTemp) : 'N/A'}°C</p>
-                <p>Max Temp: {day.maxTemp !== undefined ? Math.round(day.maxTemp) : 'N/A'}°C</p>
-                <br />
-                <p>{day.description}</p>
+                <p>Min Temp: {day.minTemp !== undefined ? day.minTemp : 'N/A'}°C</p>
+                <p>Max Temp: {day.maxTemp !== undefined ? day.maxTemp : 'N/A'}°C</p>
+                <p>Description: {day.description}</p>
+                <p>Wind Speed: {day.windSpeed} m/s</p>
+                <p>Humidity: {day.humidity}%</p>
+                <p>Pressure: {day.pressure} hPa</p>
+                
               </div>
             ))}
           </div>

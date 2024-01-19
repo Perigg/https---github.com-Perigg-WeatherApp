@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/Weather.css'; // Anpassa sökvägen beroende på din projektstruktur
+import '../styles/Weather.css';
 
 const CurrentWeather = ({ weatherData }) => {
   return (
