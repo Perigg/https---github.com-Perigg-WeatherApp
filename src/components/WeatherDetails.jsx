@@ -1,42 +1,49 @@
 import React from 'react';
 
 const WeatherDetails = ({ forecastData }) => {
+  
+  if (!forecastData) {
+    return <p>No forecast data available.</p>;
+  }
   const getFormattedDate = (timestamp) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString('en-US', { weekday: 'long' });
   };
 
   const filterDailyReports = (list) => {
-    // ett objekt för att hålla unika dagar
+    // An object to hold unique days
     const dailyData = {};
-
-    // Loopa igenom varje rapport
+  
+    // Loop through each report
     list.forEach((report) => {
-      const date = report.dt_txt.split(' ')[0]; // Extrahera datumet från dt_txt
-
-      // Kontrollera om rapporten är för en kommande dag
+      const date = report.dt_txt.split(' ')[0]; // Extract the date from dt_txt
+  
+      // Check if the report is for a future day
       if (new Date(date) > new Date()) {
-        // Om dagen inte finns i objektet eller om temperaturen är högre än max eller lägre än min
-        if (!dailyData[date] || report.main.temp > dailyData[date].maxTemp) {
+        // If the day doesn't exist in the object or if the temperature is higher than max or lower than min
+        if (!dailyData[date]) {
           dailyData[date] = {
-            minTemp: Math.round(report.main.temp),
-            maxTemp: Math.round(report.main.temp),
+            minTemp: Math.round(report.main.temp_min),
+            maxTemp: Math.round(report.main.temp_max),
             icon: report.weather[0]?.icon || '',
             description: report.weather[0]?.description || 'N/A',
             windSpeed: Math.round(report.wind?.speed) || 'N/A',
             humidity: Math.round(report.main?.humidity) || 'N/A',
             pressure: Math.round(report.main?.pressure) || 'N/A',
-            
           };
         } else {
-          // Uppdatera min och max om temperaturen är högre eller lägre
-          dailyData[date].minTemp = Math.min(dailyData[date].minTemp, report.main.temp);
-          dailyData[date].maxTemp = Math.max(dailyData[date].maxTemp, report.main.temp);
+          // Update min and max only if the current temperature is outside the existing range
+          if (report.main.temp < dailyData[date].minTemp) {
+            dailyData[date].minTemp = Math.round(report.main.temp);
+          }
+          if (report.main.temp > dailyData[date].maxTemp) {
+            dailyData[date].maxTemp = Math.round(report.main.temp);
+          }
         }
       }
     });
-
-    // Konvertera till array-format för att underlätta rendering
+  
+    // Convert to array format for easier rendering
     const aggregatedArray = Object.keys(dailyData).map((date) => ({
       dt: new Date(date + 'T12:00:00Z').getTime() / 1000,
       minTemp: dailyData[date].minTemp,
@@ -46,15 +53,14 @@ const WeatherDetails = ({ forecastData }) => {
       windSpeed: dailyData[date].windSpeed,
       humidity: dailyData[date].humidity,
       pressure: dailyData[date].pressure,
-      
     }));
-
+  
     return aggregatedArray;
   };
 
-  console.log('Forecast Data:', forecastData);
+  
   const filteredReports = forecastData ? filterDailyReports(forecastData.list) : [];
-  console.log('Filtered Reports:', filteredReports);
+  
 
   return (
     <div className="weather-details">
