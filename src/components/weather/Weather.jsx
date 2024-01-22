@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import CurrentWeather from './CurrentWeather';
-import SearchForm from './SearchForm';
-import WeatherDetails from './WeatherDetails';
-import '../styles/Weather.css';
-import Header from './Header';
+import CurrentWeather from '../currentWeather/CurrentWeather';
+import SearchForm from '../searchForm/SearchForm';
+import WeatherDetails from '../weatherDetails/WeatherDetails';
+import './Weather.css';
+import Header from '../header/Header';
 
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
@@ -11,7 +11,7 @@ const Weather = () => {
   const [searchQuery, setSearchQuery] = useState('Stockholm');
 
   useEffect(() => {
-    const apiKey = '3f1d37687623975b9b4b003e66b7da6e';
+    const apiKey = '7a637f71a69de1b80dda7240df8bc77e';
   
     const fetchData = async () => {
       try {
@@ -51,7 +51,6 @@ const Weather = () => {
         <CurrentWeather weatherData={weatherData} />
       </div>
       <div className="details-box">
-        
         <WeatherDetails forecastData={forecastData} />
       </div>
     </div>

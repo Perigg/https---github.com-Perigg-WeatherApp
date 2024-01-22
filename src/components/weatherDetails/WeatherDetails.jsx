@@ -1,4 +1,5 @@
 import React from 'react';
+import'./WeatherDetails.css';
 
 const WeatherDetails = ({ forecastData }) => {
   
