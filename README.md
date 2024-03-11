@@ -1,4 +1,4 @@
-<img src='./Github_Images/Skärmbild 2024-03-11 180625' width=80%>
+<img src='./Github_Images/Picture1' width=80%>
 
 # React + Vite
 
