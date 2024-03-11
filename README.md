@@ -1,4 +1,5 @@
-<img src='./Github_Images/picture1.png' width=80%>
+<img src='./Github_Images/picture1.png' width=60%>
+<img src='./Github_Images/picture2.png' width=60%>
 
 # React + Vite
 
