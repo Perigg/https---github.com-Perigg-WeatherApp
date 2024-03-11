@@ -1,3 +1,5 @@
+<img src='./Github_Images/Skärmbild 2024-03-11 180625' width=80%>
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
